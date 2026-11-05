@@ -1,7 +1,7 @@
 ---
 spec_id: 001-tasks-in-postgres-seen-and-created-in
 title: Tasks in Postgres, seen and created in the web UI
-status: draft
+status: approved
 priority: P1
 shape: gitops-app
 ---
@@ -76,3 +76,4 @@ Creating tasks (web):
 
 - 2026-11-05 created
 - 2026-11-05 amended: all open questions answered as suggested (oldest-first order, `YYYY-MM-DD` dates, the five English UI texts, `503` and not ready while the database is down, in-memory tasks may be lost, no backups, no sign-in); criteria unchanged, non-goals on backups and sign-in made explicit
+- 2026-11-05 approved
