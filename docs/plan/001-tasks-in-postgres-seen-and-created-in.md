@@ -3,40 +3,64 @@ plan_id: 001-tasks-in-postgres-seen-and-created-in
 spec: 001-tasks-in-postgres-seen-and-created-in
 feature: Tasks stored in the system's Postgres and shown and created in the web app
 gitops_app: ika100-demo/taskboard3-gitops
-status: draft
+status: completed
 repos:
-  - id: taskboard3-gitops
-    shape: gitops-app
-    summary: Postgres for the taskboard3 system, wired to the API, and the API's URL wired to the web app
-    acs: [AC-001.1, AC-001.2, AC-001.6, AC-001.11, AC-001.16]
-    gitops:
-      - {resource: postgres}
-      - {uses: postgres, component: taskboard3-api}
-      - {env: {TASKS_API_URL: 'http://taskboard3-api'}, component: taskboard3-web}
-    depends_on: []
-    done: false
-  - id: taskboard3-api
-    shape: service-python
-    summary: Store tasks in Postgres instead of memory, with 503 and not-ready while the database is down
-    acs: [AC-001.1, AC-001.2, AC-001.3, AC-001.4, AC-001.5]
-    arguments: |
-      Builds on the API's spec 001 (in memory): keep the routes, models and validation of
-      src/taskboard3_api/tasks/ and replace the in-memory TaskStore behind get_task_store with a
-      Postgres store. Connection settings come from DATABASE_URL (PG* are also set); see the
-      plan's Contract for the table, ordering, 503 body, readiness and timeouts. The API's
-      acceptance tests need a real Postgres (a throwaway one in tests/CI), not a mock.
-    depends_on: []
-    done: false
-  - id: taskboard3-web
-    shape: web-nextjs
-    summary: Task page at the root URL that lists tasks and adds a task through the Task API
-    acs: [AC-001.6, AC-001.7, AC-001.8, AC-001.9, AC-001.10, AC-001.11, AC-001.12, AC-001.13, AC-001.14, AC-001.15, AC-001.16]
-    arguments: |
-      Replaces the starter page in app/page.tsx. The API is reached only server side, through
-      TASKS_API_URL (add it to docs/env-vars.md); the browser never calls the API directly.
-      Component and e2e tests stub the API at TASKS_API_URL with the responses of the Contract.
-    depends_on: []
-    done: false
+- id: taskboard3-gitops
+  shape: gitops-app
+  summary: Postgres for the taskboard3 system, wired to the API, and the API's URL wired to the web app
+  acs:
+  - AC-001.1
+  - AC-001.2
+  - AC-001.6
+  - AC-001.11
+  - AC-001.16
+  gitops:
+  - resource: postgres
+  - uses: postgres
+    component: taskboard3-api
+  - env:
+      TASKS_API_URL: http://taskboard3-api
+    component: taskboard3-web
+  depends_on: []
+  done: true
+- id: taskboard3-api
+  shape: service-python
+  summary: Store tasks in Postgres instead of memory, with 503 and not-ready while the database is down
+  acs:
+  - AC-001.1
+  - AC-001.2
+  - AC-001.3
+  - AC-001.4
+  - AC-001.5
+  arguments: |
+    Builds on the API's spec 001 (in memory): keep the routes, models and validation of
+    src/taskboard3_api/tasks/ and replace the in-memory TaskStore behind get_task_store with a
+    Postgres store. Connection settings come from DATABASE_URL (PG* are also set); see the
+    plan's Contract for the table, ordering, 503 body, readiness and timeouts. The API's
+    acceptance tests need a real Postgres (a throwaway one in tests/CI), not a mock.
+  depends_on: []
+  done: true
+- id: taskboard3-web
+  shape: web-nextjs
+  summary: Task page at the root URL that lists tasks and adds a task through the Task API
+  acs:
+  - AC-001.6
+  - AC-001.7
+  - AC-001.8
+  - AC-001.9
+  - AC-001.10
+  - AC-001.11
+  - AC-001.12
+  - AC-001.13
+  - AC-001.14
+  - AC-001.15
+  - AC-001.16
+  arguments: |
+    Replaces the starter page in app/page.tsx. The API is reached only server side, through
+    TASKS_API_URL (add it to docs/env-vars.md); the browser never calls the API directly.
+    Component and e2e tests stub the API at TASKS_API_URL with the responses of the Contract.
+  depends_on: []
+  done: true
 gitops_pin: []
 ---
 
