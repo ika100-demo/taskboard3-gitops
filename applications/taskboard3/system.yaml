@@ -73,6 +73,7 @@ components:
       next-cache: /app/.next/cache
     env:
       NODE_ENV: production
+      TASKS_API_URL: http://taskboard3-api
     secretRefs: []
     resources:
       requests:
