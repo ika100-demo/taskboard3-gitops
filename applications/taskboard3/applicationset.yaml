@@ -83,3 +83,32 @@ spec:
           selfHeal: true
         syncOptions:
         - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: taskboard3-addons-dev
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - name: postgres
+  template:
+    metadata:
+      name: addon-{{name}}-dev
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/ika100-demo/taskboard3-gitops
+        targetRevision: main
+        path: applications/taskboard3/addons/dev/{{name}}
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: taskboard3-dev
+      syncPolicy:
+        automated:
+          prune: false
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=true
