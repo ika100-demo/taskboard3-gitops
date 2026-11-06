@@ -36,7 +36,9 @@ metadata:
 spec:
   generators:
   - list:
-      elements: []
+      elements:
+      - name: taskboard3-api
+      - name: taskboard3-web
   template:
     metadata:
       name: '{{name}}-staging'
@@ -135,6 +137,64 @@ spec:
       destination:
         server: https://kubernetes.default.svc
         namespace: taskboard3-dev
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: taskboard3-addons-staging
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - name: postgres
+  template:
+    metadata:
+      name: addon-{{name}}-staging
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/ika100-demo/taskboard3-gitops
+        targetRevision: main
+        path: applications/taskboard3/addons/staging/{{name}}
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: taskboard3-staging
+      syncPolicy:
+        automated:
+          prune: false
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: taskboard3-addons-config-staging
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - name: observability
+  template:
+    metadata:
+      name: addon-{{name}}-staging
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/ika100-demo/taskboard3-gitops
+        targetRevision: main
+        path: applications/taskboard3/addons/staging/{{name}}
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: taskboard3-staging
       syncPolicy:
         automated:
           prune: true
