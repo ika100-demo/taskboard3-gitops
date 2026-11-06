@@ -66,7 +66,8 @@ metadata:
 spec:
   generators:
   - list:
-      elements: []
+      elements:
+      - name: taskboard3-web
   template:
     metadata:
       name: '{{name}}-prod'
