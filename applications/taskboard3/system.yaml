@@ -60,6 +60,7 @@ components:
     instances:
       dev: {}
       staging: {}
+      prod: {}
     expose:
       host: taskboard3-api
     uses:
